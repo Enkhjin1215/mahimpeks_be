@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   db:
     image: mysql:8
@@ -15,7 +17,7 @@ services:
     networks:
       - django-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpass"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "-prootpass"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -45,7 +47,7 @@ services:
       - ./static:/app/static
       - ./media:/app/media
     ports:
-      - "8000:8000"
+      - "8000:8000"  # TCP порт ашиглаж байна
     depends_on:
       db:
         condition: service_healthy
@@ -62,6 +64,7 @@ services:
       DEBUG: 1
     networks:
       - django-network
+    command: gunicorn mahimpeks_be.wsgi:application --bind 0.0.0.0:8000  # Gunicorn TCP портоор ажиллуулах
 
 networks:
   django-network:
