@@ -38,33 +38,34 @@ services:
       timeout: 5s
       retries: 5
 
-  web:
-    build: .
-    container_name: django-app
-    restart: always
-    volumes:
-      - .:/app
-      - ./static:/app/static
-      - ./media:/app/media
-    ports:
-      - "8000:8000"  # TCP порт ашиглаж байна
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    environment:
-      DB_HOST: db
-      DB_NAME: mah_db
-      DB_USER: django_user
-      DB_PASSWORD: pass1234
-      DB_PORT: 3306
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      DEBUG: 1
-    networks:
-      - django-network
-    command: gunicorn mahimpeks_be.wsgi:application --bind 0.0.0.0:8000  # Gunicorn TCP портоор ажиллуулах
+web:
+  build: .
+  container_name: django-app
+  restart: always
+  volumes:
+    - .:/app
+    - ./static:/app/static
+    - ./media:/app/media
+  ports:
+    - "8000:8000"  # TCP порт
+  depends_on:
+    db:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+  environment:
+    DB_HOST: db
+    DB_NAME: mah_db
+    DB_USER: django_user
+    DB_PASSWORD: pass1234
+    DB_PORT: 3306
+    REDIS_HOST: redis
+    REDIS_PORT: 6379
+    DEBUG: 1
+  networks:
+    - django-network
+  command: gunicorn myproject.wsgi:application --bind 0.0.0.0:8000
+
 
 networks:
   django-network:
